@@ -2,7 +2,7 @@ require "csvash/version"
 require 'csv'
 
 module Csvash
-  # <b>DEPRECATED:</b> Please use <tt>useful</tt> instead.
+  # <b>DEPRECATED:</b> Please use <tt>hashify</tt> instead.
   def self.import_from_path(path)
     warn "[DEPRECATION] `import_from_path` is deprecated. Please use `hashify` instead."
     hashify path

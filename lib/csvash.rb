@@ -3,8 +3,6 @@ require 'csv'
 
 module Csvash
   def self.import_from_path(path)
-    transactions = []
-
     cols = nil
     first_line = true
     collection = []

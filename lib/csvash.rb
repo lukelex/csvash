@@ -16,7 +16,7 @@ module Csvash
 
   def self.modelify(path, klass)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
-    params = import path do |collection, current_line|
+    import path do |collection, current_line|
       collection << klass.new(current_line)
     end
   end

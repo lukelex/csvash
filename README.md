@@ -6,19 +6,35 @@ Csvash automates your CSV extraction by mapping its headers with the columns con
 
 Add this line to your application's Gemfile:
 
-    gem 'csvash'
+```ruby
+gem 'csvash'
+```
 
 And then execute:
 
-    $ bundle
+```
+$ bundle
+```
 
 Or install it yourself as:
 
-    $ gem install csvash
+```
+$ gem install csvash
+```
 
 ## Usage
 
-    Csvash.import_from_path '/path/of/your/file.csv'
+To get a collection of hashes containing the csv data you can call:
+
+```ruby
+Csvash.hashify '/path/of/your/file.csv'
+```
+
+If you prefer a collection of already filled objects from a specific class you can pass the csv path and the class:
+
+```ruby
+Csvash.modelify '/path/of/your/file.csv', User
+```
 
 ## Contributing
 

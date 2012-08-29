@@ -14,4 +14,6 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib"]
   gem.version       = Csvash::VERSION
+
+  gem.add_dependency 'rake'
 end

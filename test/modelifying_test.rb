@@ -15,9 +15,9 @@ describe 'Modelifying' do
       description: 'ac, abs, moon',
       price: '3000.00'
     )
-    p cars_extracted.first
-    p car
-    cars_extracted.first.must_equal car
+    cars_extracted.first.instance_variables.each do |name|
+      cars_extracted.first.instance_variable_get(name).must_equal car.instance_variable_get(name)
+    end
   end
 end
 

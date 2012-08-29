@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-Csvash.import_from_path '/path/of/your/file.csv'
+    Csvash.import_from_path '/path/of/your/file.csv'
 
 ## Contributing
 

@@ -1,5 +1,7 @@
 # Csvash
 
+[![Build Status](https://secure.travis-ci.org/lukasalexandre/csvash.png)](http://travis-ci.org/lukasalexandre/csvash) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/lukasalexandre/csvash)
+
 Csvash automates your CSV extraction by mapping its headers with the columns contents and turning them into hashes that can be easily converted into ruby models.
 
 ## Installation

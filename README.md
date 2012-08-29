@@ -24,6 +24,12 @@ $ gem install csvash
 
 ## Usage
 
+First of all you have to require it in your file:
+
+```ruby
+require 'csvash'
+```
+
 To get a collection of hashes containing the csv data you can call:
 
 ```ruby

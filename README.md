@@ -1,6 +1,6 @@
 # Csvash
 
-TODO: Write a gem description
+Csvash automates your CSV extraction by mapping its headers with the columns contents and turning them into hashes that can be easily converted into ruby models.
 
 ## Installation
 
@@ -18,7 +18,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Csvash.import_from_path '/path/of/your/file.csv'
 
 ## Contributing
 

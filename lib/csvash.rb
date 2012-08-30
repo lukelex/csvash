@@ -1,4 +1,4 @@
-require "csvash/version"
+require 'csvash/version'
 require 'csv'
 
 module Csvash
@@ -15,7 +15,7 @@ module Csvash
       collection << current_line
     end
   end
-
+  
   def self.modelify(path, klass)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     import path do |collection, current_line|
@@ -52,4 +52,15 @@ private
       line = line.delete_if {|col| !attr_cols.include? col}
     end
   end
+  
+  # generates a csv file into a given path
+  # creates the path if necessary (ex: *tmp/klass/desired/path - where *tmp holds the upcoming directories)  
+  def self.export(file, klass, &block)
+  
+  end
+  
+  # shifts the method calling towards export() or import()
+  def method_missing(method, *args)
+  end
+  
 end

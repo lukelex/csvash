@@ -19,15 +19,18 @@ describe 'Modelifying' do
       cars_extracted.first.instance_variable_get(name).must_equal car.instance_variable_get(name)
     end
   end
+
+  it "Mass assignment Safe Mode ON" do
+    Csvash.mass_assignment_safe = true
+    cars_extracted = Csvash.modelify fetch_fixture_path('example_mass_assignment.csv'), Car
+  end
 end
 
 class Car
   def initialize(params)
-    self.year = params[:year]
-    self.make = params[:make]
-    self.model = params[:model]
-    self.description = params[:description]
-    self.price = params[:price]
+    params.each do |key, value|
+      self.public_send("#{key}=", value)
+    end
   end
   attr_accessor :year, :make, :model, :description, :price
 end

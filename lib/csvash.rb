@@ -2,6 +2,8 @@ require "csvash/version"
 require 'csv'
 
 module Csvash
+  class << self; attr_accessor :mass_assignment_safe end
+
   # <b>DEPRECATED:</b> Please use <tt>hashify</tt> instead.
   def self.import_from_path(path)
     warn "[DEPRECATION] `import_from_path` is deprecated. Please use `hashify` instead."
@@ -17,6 +19,7 @@ module Csvash
   def self.modelify(path, klass)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     import path do |collection, current_line|
+      handle_mass_assignment(klass, current_line)
       collection << klass.new(current_line)
     end
   end
@@ -24,8 +27,8 @@ module Csvash
 private
   def self.import(path, &block)
     cols = nil
-    first_line = true
     collection = []
+    first_line = true
 
     CSV.foreach(path, :encoding => "ISO-8859-1:UTF-8", :col_sep => "\;") do |line|
       if first_line
@@ -41,5 +44,12 @@ private
       block.call(collection, current_line)
     end
     collection
+  end
+
+  def self.handle_mass_assignment(klass, line)
+    if mass_assignment_safe
+      attr_cols = klass.instance_methods(false)
+      line = line.delete_if {|col| !attr_cols.include? col}
+    end
   end
 end

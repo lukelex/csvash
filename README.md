@@ -42,6 +42,21 @@ If you prefer a collection of already filled objects from a specific class you c
 Csvash.modelify '/path/of/your/file.csv', User
 ```
 
+##Options
+
+There are some behavior options that can be changed with its initializer. To create it just type:
+
+```
+$ rails generate initializer csvash
+```
+
+These are the avaiable options
+
+```ruby
+# If set to true it will only retain fields that matches the class to be filled. Default is false.
+# Csvash.mass_assignment_safe = true
+```
+
 ## Contributing
 
 1. Fork it

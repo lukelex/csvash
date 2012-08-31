@@ -62,6 +62,7 @@ private
   def self.export(file, &block)
     cols = nil
     collection = []
+    # TODO - gotta get a way to get the klass object from modelify proc
     true
   end
 

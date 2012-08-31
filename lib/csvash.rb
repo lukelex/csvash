@@ -19,7 +19,8 @@ module Csvash
   # <b>DEPRECATED:</b> Please use <tt>modelify_and_export</tt> or <tt>modelify_and_import</tt> instead.
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
-    self.send args[0], path do |collection, current_line|
+    method = args.first
+    self.send method , path do |collection, current_line|
       handle_mass_assignment(klass, current_line)
       collection << klass.new(current_line)
     end
@@ -58,20 +59,18 @@ private
   
   # generates a csv file into a given path
   # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
-  def self.export(file, klass, &block)
-    
+  def self.export(file, &block)
+    cols = nil
+    collection = []
+    true
   end
 
   # shifts the method calling towards export() or import()
   # ex: modelify_and_import("path/to/file.csv", User), modelify_and_export("path/to/custom_filename.csv", User)
   def self.method_missing(method_name, *args)
+    # modelify
     if method_name =~ /^modelify_and_(\w+)$/
-      # better implementation needed
-      unless args[1].nil?
-        Csvash.send(:modelify, args[0], args[1], $1)
-      else
-        Csvash.send(:modelify, args[0], $1)
-      end
+      Csvash.send(:modelify, args[0], args[1], $1)
     end
   end
 

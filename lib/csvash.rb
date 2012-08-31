@@ -20,7 +20,7 @@ module Csvash
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
-    self.send method , path do |collection, current_line|
+    self.send method , path, *klass do |collection, current_line|
       handle_mass_assignment(klass, current_line)
       collection << klass.new(current_line)
     end
@@ -29,7 +29,7 @@ module Csvash
 
 private
   
-  def self.import(path, &block)
+  def self.import(path, *optionals, &block)
     cols = nil
     collection = []
     first_line = true
@@ -59,11 +59,12 @@ private
   
   # generates a csv file into a given path
   # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
-  def self.export(file, &block)
+  def self.export(file, klass, &block)
     cols = nil
     collection = []
-    # TODO - gotta get a way to get the klass object from modelify proc
-    true
+    current_line = nil
+    klass
+    # should return true 
   end
 
   # shifts the method calling towards export() or import()

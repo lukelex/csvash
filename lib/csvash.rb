@@ -64,7 +64,7 @@ private
     collection = []
     current_line = nil
     klass
-    # should return true 
+    # should return true
   end
 
   # shifts the method calling towards export() or import()
@@ -72,7 +72,7 @@ private
   def self.method_missing(method_name, *args)
     # modelify
     if method_name =~ /^modelify_and_(\w+)$/
-      Csvash.send(:modelify, args[0], args[1], $1)
+      Csvash.send(:modelify, *args, $1)
     end
   end
 

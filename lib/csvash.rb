@@ -20,9 +20,14 @@ module Csvash
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
-    self.send method , path, *klass do |collection, current_line|
-      handle_mass_assignment(klass, current_line)
-      collection << klass.new(current_line)
+
+    # rejecting attributes
+    unless method.is_a?Hash
+      self.public_send method , path, klass do |collection, current_line|
+        handle_mass_assignment(klass, current_line)
+        collection << klass.new(current_line)
+      end
+    else
     end
   end
 
@@ -59,22 +64,24 @@ private
   
   # generates a csv file into a given path
   # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
-  def self.export(file, klass, &block)
+  def self.export(file, klass, reject=[], &block)
     cols = nil
     collection = []
     current_line = nil
-    klass
+    klass.inspect
     # should return true
   end
 
   # shifts the method calling towards export() or import()
   # ex: modelify_and_import("path/to/file.csv", User), modelify_and_export("path/to/custom_filename.csv", User)
   def self.method_missing(method_name, *args)
-    # modelify
-    if method_name =~ /^modelify_and_(\w+)$/
-      Csvash.send(:modelify, *args, $1)
-    end
+    super unless method_name =~ /^modelify_and_(\w+)$/
+    Csvash.public_send(:modelify, *args, $1)
   end
 
+  # overriding respond_to method
+  def respond_to?(method)
+    (method =~ /^modelify_and_(\w+)$/) || super
+  end
 
 end

@@ -77,6 +77,7 @@ private
       csv_return = nil
       CSV.open(file, 'wb') do |csv|  
         csv << rows
+        csv << ["nome1", "nome2"]
         csv_return = csv
       end
       csv_return

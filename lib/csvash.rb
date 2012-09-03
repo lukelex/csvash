@@ -1,5 +1,6 @@
 require 'csvash/version'
 require 'csv'
+require 'fileutils'
 
 module Csvash
   class << self; attr_accessor :mass_assignment_safe end
@@ -20,7 +21,7 @@ module Csvash
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
-
+    puts klass
     # rejecting attributes
     unless method.is_a?Hash
       self.public_send method , path, klass do |collection, current_line|
@@ -67,9 +68,21 @@ private
   def self.export(file, klass, reject=[], &block)
     cols = nil
     collection = []
+    rows = []
     current_line = nil
-    klass.inspect
-    # should return true
+    file = self.full_path(file)
+    # retrieving instance method names (getters)
+    klass.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
+    begin
+      csv_return = nil
+      CSV.open(file, 'wb') do |csv|  
+        csv << rows
+        csv_return = csv
+      end
+      csv_return
+    rescue Errno::ENOENT => e
+      puts e
+    end
   end
 
   # shifts the method calling towards export() or import()
@@ -82,6 +95,17 @@ private
   # overriding respond_to method
   def respond_to?(method)
     (method =~ /^modelify_and_(\w+)$/) || super
+  end
+
+  # creates a tmp file
+  def self.full_path(file)
+    path = "tmp/"
+    if File.directory?(path)
+      (path).concat(file)
+    else
+      FileUtils.mkdir_p(path)
+      (path).concat(file)
+    end
   end
 
 end

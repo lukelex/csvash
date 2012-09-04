@@ -21,7 +21,6 @@ module Csvash
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
-    puts klass
     # rejecting attributes
     unless method.is_a?Hash
       self.public_send method , path, klass do |collection, current_line|
@@ -66,18 +65,16 @@ private
   # generates a csv file into a given path
   # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
   def self.export(file, klass, reject=[], &block)
-    cols = nil
-    collection = []
     rows = []
-    current_line = nil
     file = self.full_path(file)
     # retrieving instance method names (getters)
     klass.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
+    #gotta find an way to find the records by attributes
+    #lines = klass.find
     begin
       csv_return = nil
       CSV.open(file, 'wb') do |csv|  
         csv << rows
-        csv << ["nome1", "nome2"]
         csv_return = csv
       end
       csv_return

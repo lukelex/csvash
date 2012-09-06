@@ -67,16 +67,17 @@ private
   def self.export(file, klass, reject=[], &block)
     rows = []
     file = self.full_path(file)
+    fields = ""
     # retrieving instance method names (getters)
     klass.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
     # if its related to a model
     if klass.respond_to?"select"
       fields = rows.each_with_index do |(s), i|
-                  if i < (rows.length-1)
-                    str << s.to_s + ","
-                  else
-                    str << s.to_s
-                  end
+        if i < (rows.length-1)
+          str << s.to_s + ","
+        else
+          str << s.to_s
+        end
       end
       lines = klass.select(fields)
       begin

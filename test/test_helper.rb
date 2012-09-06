@@ -4,4 +4,5 @@ module TestHelper
   def fetch_fixture_path(path)
     File.join(BASE_PATH, path)
   end
+  
 end

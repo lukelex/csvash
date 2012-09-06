@@ -69,17 +69,31 @@ private
     file = self.full_path(file)
     # retrieving instance method names (getters)
     klass.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
-    #gotta find an way to find the records by attributes
-    #lines = klass.find
-    begin
-      csv_return = nil
-      CSV.open(file, 'wb') do |csv|  
-        csv << rows
-        csv_return = csv
+    # if its related to a model
+    if klass.respond_to?"select"
+      fields = rows.each_with_index do |(s), i|
+                  if i < (rows.length-1)
+                    str << s.to_s + ","
+                  else
+                    str << s.to_s
+                  end
       end
-      csv_return
-    rescue Errno::ENOENT => e
-      puts e
+      lines = klass.select(fields)
+      begin
+        csv_return = nil
+        CSV.open(file, 'wb') do |csv|  
+          csv << rows
+          lines.each do |model_object|
+            rows.each do |attribute|
+              csv << model_object.send(attribute)
+            end
+          end
+          csv_return = csv
+        end
+        csv_return
+      rescue Errno::ENOENT => e
+        puts e
+      end
     end
   end
 

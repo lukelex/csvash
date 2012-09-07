@@ -1,6 +1,8 @@
 require 'csvash/version'
 require 'csv'
 require 'fileutils'
+require 'active_record'
+
 
 module Csvash
   class << self; attr_accessor :mass_assignment_safe end
@@ -67,27 +69,30 @@ private
   def self.export(file, klass, reject=[], &block)
     rows = []
     file = self.full_path(file)
-    fields = ""
-    # retrieving instance method names (getters)
-    klass.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
-    # if its related to a model
-    if klass.respond_to?"select"
-      fields = rows.each_with_index do |(s), i|
+    fields = "" 
+    # if its related to a model and it is ActiveRecord
+    if klass.respond_to?"select" and Object.const_defined?('ActiveRecord')
+      # retrieving instance method names (getters)
+      klass.column_defaults.delete_if {|key, value| rows << key unless key.eql?"id" }
+      rows.each_with_index do |(s), i|
         if i < (rows.length-1)
-          str << s.to_s + ","
+          fields << s.to_s + ","
         else
-          str << s.to_s
+          fields << s.to_s
         end
       end
-      lines = klass.select(fields)
+      # performing the query
+      query = klass.select("#{fields}")
       begin
         csv_return = nil
         CSV.open(file, 'wb') do |csv|  
           csv << rows
-          lines.each do |model_object|
+          query.each do |model_object|
+            lines = []
             rows.each do |attribute|
-              csv << model_object.send(attribute)
+              lines << model_object.send(attribute.to_sym)
             end
+            csv << lines
           end
           csv_return = csv
         end
@@ -96,6 +101,7 @@ private
         puts e
       end
     end
+
   end
 
   # shifts the method calling towards export() or import()

@@ -66,32 +66,20 @@ private
   
   # generates a csv file into a given path
   # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
-  def self.export(file, klass, reject=[], &block)
+  def self.export(file, collection, &block)
     rows = []
     file = self.full_path(file)
-    fields = "" 
-    # if its related to a model and it is ActiveRecord
-    if klass.respond_to?"select" and Object.const_defined?('ActiveRecord')
+    fields = ""
+    unless collection.empty?
       # retrieving instance method names (getters)
-      klass.column_defaults.delete_if {|key, value| rows << key unless key.eql?"id" }
-      rows.each_with_index do |(s), i|
-        if i < (rows.length-1)
-          fields << s.to_s + ","
-        else
-          fields << s.to_s
-        end
-      end
-      # performing the query
-      query = klass.select("#{fields}")
+      collection.first.class.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
       begin
         csv_return = nil
         CSV.open(file, 'wb') do |csv|  
           csv << rows
-          query.each do |model_object|
+          collection.each do |item|
             lines = []
-            rows.each do |attribute|
-              lines << model_object.send(attribute.to_sym)
-            end
+            rows.each {|attribute| lines << item.send(attribute)}
             csv << lines
           end
           csv_return = csv
@@ -101,8 +89,8 @@ private
         puts e
       end
     end
-
   end
+
 
   # shifts the method calling towards export() or import()
   # ex: modelify_and_import("path/to/file.csv", User), modelify_and_export("path/to/custom_filename.csv", User)
@@ -116,15 +104,17 @@ private
     (method =~ /^modelify_and_(\w+)$/) || super
   end
 
-  # creates a tmp file
+  # creates the full path
   def self.full_path(file)
-    path = "tmp/"
-    if File.directory?(path)
-      (path).concat(file)
+    splitted = file.split("/")
+    current_file = file.split("/").last
+    current_path = splitted.shift(splitted.size-1)
+    current_full_path = current_path.join("/") + "/"
+    if File.directory?(current_full_path)
+      (current_full_path).concat(current_file)
     else
-      FileUtils.mkdir_p(path)
-      (path).concat(file)
+      FileUtils.mkdir_p(current_full_path)
+      (current_full_path).concat(current_file)
     end
   end
-
 end

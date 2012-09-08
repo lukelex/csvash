@@ -1,5 +1,6 @@
 require 'minitest/spec'
 require 'minitest/autorun'
+require 'fileutils'
 require 'csvash'
 require "./test/test_helper"
 
@@ -27,8 +28,8 @@ describe 'Modelifying' do
     end
   end
   describe "export" do
-    it "passing the class" do
-      cars_extracted = Csvash.modelify_and_export fetch_fixture_path('example.csv'), Car
+    it "passing a collection of Car object" do
+      cars = []
       car = Car.new(
         year: '1997',
         make: 'Ford',
@@ -36,7 +37,10 @@ describe 'Modelifying' do
         description: 'ac, abs, moon',
         price: '3000.00'
       )
-      # the return should be a file with lines and content
+      cars << car
+      cars_exported = Csvash.modelify_and_export fetch_fixture_path('tmp/teste/cars.csv'), cars
+      cars_exported.wont_be_nil
+      FileUtils.rm_rf(fetch_fixture_path('tmp/'))
     end
   end
 end

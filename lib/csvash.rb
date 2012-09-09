@@ -65,7 +65,7 @@ private
   end
   
   # generates a csv file into a given path
-  # creates the path if necessary (ex: *tmp/desired/path - where *tmp holds the upcoming directories)  
+  # a path must be given (ex: *path/to/file.csv)  
   def self.export(file, collection, &block)
     rows = []
     file = self.full_path(file)
@@ -93,7 +93,7 @@ private
 
 
   # shifts the method calling towards export() or import()
-  # ex: modelify_and_import("path/to/file.csv", User), modelify_and_export("path/to/custom_filename.csv", User)
+  # ex: modelify_and_import("path/to/file.csv", collection), modelify_and_export("path/to/custom_filename.csv", collection)
   def self.method_missing(method_name, *args)
     super unless method_name =~ /^modelify_and_(\w+)$/
     Csvash.public_send(:modelify, *args, $1)

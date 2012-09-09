@@ -38,7 +38,7 @@ describe 'Modelifying' do
         price: '3000.00'
       )
       cars << car
-      cars_exported = Csvash.modelify_and_export fetch_fixture_path('tmp/teste/cars.csv'), cars
+      cars_exported = Csvash.modelify_and_export fetch_fixture_path('tmp/cars.csv'), cars
       cars_exported.wont_be_nil
       FileUtils.rm_rf(fetch_fixture_path('tmp/'))
     end

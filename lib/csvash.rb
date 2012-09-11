@@ -75,7 +75,7 @@ private
       collection.first.class.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
       begin
         csv_return = nil
-        CSV.open(file, 'wb') do |csv|  
+        CSV.open(file, 'wb') do |csv|
           csv << rows
           collection.each do |item|
             lines = []

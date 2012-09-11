@@ -43,6 +43,7 @@ describe 'Modelifying' do
       FileUtils.rm_rf(fetch_fixture_path('tmp/'))
     end
   end
+
 end
 
 class Car

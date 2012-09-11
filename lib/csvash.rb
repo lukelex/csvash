@@ -1,8 +1,6 @@
 require 'csvash/version'
 require 'csv'
 require 'fileutils'
-require 'active_record'
-
 
 module Csvash
   class << self; attr_accessor :mass_assignment_safe end
@@ -35,7 +33,7 @@ module Csvash
 
 
 private
-  
+
   def self.import(path, *optionals, &block)
     cols = nil
     collection = []
@@ -63,9 +61,9 @@ private
       line = line.delete_if {|col| !attr_cols.include? col}
     end
   end
-  
+
   # generates a csv file into a given path
-  # a path must be given (ex: *path/to/file.csv)  
+  # a path must be given (ex: *path/to/file.csv)
   def self.export(file, collection, &block)
     rows = []
     file = self.full_path(file)

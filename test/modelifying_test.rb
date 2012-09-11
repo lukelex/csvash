@@ -38,17 +38,18 @@ describe 'Modelifying' do
 
     it "passing a collection of Car object" do
       cars = []
-      car = Car.new(
-        year: '1997',
-        make: 'Ford',
-        model: 'E350',
-        description: 'ac, abs, moon',
-        price: '3000.00'
-      )
-      cars << car
+      3.times do
+        cars << Car.new(
+          year: '1997',
+          make: 'Ford',
+          model: 'E350',
+          description: 'ac, abs, moon',
+          price: '3000.00'
+        )
+      end
       cars_exported = Csvash.modelify_and_export cars_path, cars
       File.exists?(cars_path).must_equal true
-      File.stat(cars_path).size.must_equal 71
+      File.stat(cars_path).size.must_equal 145
     end
   end
 

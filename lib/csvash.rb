@@ -48,19 +48,10 @@ private
     collection
   end
 
-  def self.handle_mass_assignment(klass, line)
-    if mass_assignment_safe
-      attr_cols = klass.instance_methods(false)
-      line = line.delete_if { |col| !attr_cols.include? col }
-    end
-  end
-
   # generates a csv file into a given path
   # a path must be given (ex: *path/to/file.csv)
   def self.export(file, collection, &block)
-    rows = []
-    file = self.full_path(file)
-    fields = ""
+    file = full_path(file)
 
     unless collection.empty?
       headers = retrieve_headers collection
@@ -74,6 +65,13 @@ private
       rescue Errno::ENOENT => e
         puts e
       end
+    end
+  end
+
+  def self.handle_mass_assignment(klass, line)
+    if mass_assignment_safe
+      attr_cols = klass.instance_methods(false)
+      line = line.delete_if { |col| !attr_cols.include? col }
     end
   end
 
@@ -96,8 +94,8 @@ private
     current_path = splitted.shift(splitted.size-1)
     current_full_path = current_path.join("/") + "/"
 
-    FileUtils.mkdir_p(current_full_path) unless File.directory?(current_full_path)
-    current_full_path.concat(current_file)
+    FileUtils.mkdir_p(current_full_path) unless File.directory? current_full_path
+    current_full_path.concat current_file
   end
 
   def self.retrieve_headers collection

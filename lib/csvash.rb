@@ -1,6 +1,5 @@
 require 'csvash/version'
 require 'csv'
-require 'fileutils'
 
 module Csvash
   class << self; attr_accessor :mass_assignment_safe end
@@ -21,19 +20,13 @@ module Csvash
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
-    # rejecting attributes
-    unless method.is_a?Hash
-      self.public_send method , path, klass do |collection, current_line|
-        handle_mass_assignment(klass, current_line)
-        collection << klass.new(current_line)
-      end
-    else
+    self.public_send method, path, klass do |collection, current_line|
+      handle_mass_assignment(klass, current_line)
+      collection << klass.new(current_line)
     end
   end
 
-
 private
-
   def self.import(path, *optionals, &block)
     cols = nil
     collection = []
@@ -68,21 +61,16 @@ private
     rows = []
     file = self.full_path(file)
     fields = ""
+
     unless collection.empty?
-      # retrieving instance method names (getters)
-      collection.first.class.instance_methods(false).delete_if {|m| rows << m unless m.to_s.include?"=" }
+      headers = retrieve_headers collection
       begin
-        csv_return = nil
         CSV.open(file, 'wb') do |csv|
-          csv << rows
+          csv << headers
           collection.each do |item|
-            lines = []
-            rows.each {|attribute| lines << item.send(attribute)}
-            csv << lines
+            csv << retrieve_fields(item, headers)
           end
-          csv_return = csv
         end
-        csv_return
       rescue Errno::ENOENT => e
         puts e
       end
@@ -99,7 +87,7 @@ private
 
   # overriding respond_to method
   def respond_to?(method)
-    (method =~ /^modelify_and_(\w+)$/) || super
+    (method =~ /^modelify_and_\w+$/) || super
   end
 
   # creates the full path
@@ -114,5 +102,13 @@ private
       FileUtils.mkdir_p(current_full_path)
       (current_full_path).concat(current_file)
     end
+  end
+
+  def self.retrieve_headers collection
+    collection.first.class.instance_methods(false).select { |m| m.to_s !~ /=$/ }
+  end
+
+  def self.retrieve_fields item, headers
+    headers.map { |attribute| item.public_send(attribute) }
   end
 end

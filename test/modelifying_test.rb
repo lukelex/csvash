@@ -28,6 +28,10 @@ describe 'Modelifying' do
     end
   end
   describe "export" do
+    after :each do
+      FileUtils.rm_rf fetch_fixture_path('tmp/')
+    end
+
     it "passing a collection of Car object" do
       cars = []
       car = Car.new(
@@ -40,7 +44,6 @@ describe 'Modelifying' do
       cars << car
       cars_exported = Csvash.modelify_and_export fetch_fixture_path('tmp/cars.csv'), cars
       cars_exported.wont_be_nil
-      FileUtils.rm_rf(fetch_fixture_path('tmp/'))
     end
   end
 

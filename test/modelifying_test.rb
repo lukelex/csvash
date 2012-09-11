@@ -1,6 +1,5 @@
 require 'minitest/spec'
 require 'minitest/autorun'
-require 'fileutils'
 require 'csvash'
 require "./test/test_helper"
 
@@ -28,9 +27,14 @@ describe 'Modelifying' do
     end
   end
   describe "export" do
-    after :each do
-      FileUtils.rm_rf fetch_fixture_path('tmp/')
+    before :each do
+      Dir.mkdir(fetch_fixture_path('tmp'))
     end
+    after :each do
+      FileUtils.rm_rf fetch_fixture_path('tmp')
+    end
+
+    let(:cars_path) { fetch_fixture_path('tmp/cars.csv') }
 
     it "passing a collection of Car object" do
       cars = []
@@ -42,8 +46,9 @@ describe 'Modelifying' do
         price: '3000.00'
       )
       cars << car
-      cars_exported = Csvash.modelify_and_export fetch_fixture_path('tmp/cars.csv'), cars
-      cars_exported.wont_be_nil
+      cars_exported = Csvash.modelify_and_export cars_path, cars
+      File.exists?(cars_path).must_equal true
+      File.zero?(cars_path).must_equal false
     end
   end
 

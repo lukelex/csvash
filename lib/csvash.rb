@@ -51,7 +51,7 @@ private
   def self.handle_mass_assignment(klass, line)
     if mass_assignment_safe
       attr_cols = klass.instance_methods(false)
-      line = line.delete_if {|col| !attr_cols.include? col}
+      line = line.delete_if { |col| !attr_cols.include? col }
     end
   end
 
@@ -65,7 +65,7 @@ private
     unless collection.empty?
       headers = retrieve_headers collection
       begin
-        CSV.open(file, 'wb') do |csv|
+        CSV.open(file, 'wb', :col_sep => "\;") do |csv|
           csv << headers
           collection.each do |item|
             csv << retrieve_fields(item, headers)
@@ -76,7 +76,6 @@ private
       end
     end
   end
-
 
   # shifts the method calling towards export() or import()
   # ex: modelify_and_import("path/to/file.csv", collection), modelify_and_export("path/to/custom_filename.csv", collection)
@@ -96,12 +95,9 @@ private
     current_file = file.split("/").last
     current_path = splitted.shift(splitted.size-1)
     current_full_path = current_path.join("/") + "/"
-    if File.directory?(current_full_path)
-      (current_full_path).concat(current_file)
-    else
-      FileUtils.mkdir_p(current_full_path)
-      (current_full_path).concat(current_file)
-    end
+
+    FileUtils.mkdir_p(current_full_path) unless File.directory?(current_full_path)
+    current_full_path.concat(current_file)
   end
 
   def self.retrieve_headers collection

@@ -48,7 +48,7 @@ describe 'Modelifying' do
       cars << car
       cars_exported = Csvash.modelify_and_export cars_path, cars
       File.exists?(cars_path).must_equal true
-      File.zero?(cars_path).must_equal false
+      File.stat(cars_path).size.must_equal 71
     end
   end
 

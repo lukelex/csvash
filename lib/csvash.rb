@@ -3,6 +3,7 @@ require 'csv'
 
 module Csvash
   class << self; attr_accessor :mass_assignment_safe end
+  @@mass_assignment_safe = false
 
   # <b>DEPRECATED:</b> Please use <tt>hashify</tt> instead.
   def self.import_from_path(path)
@@ -24,6 +25,10 @@ module Csvash
       handle_mass_assignment(klass, current_line)
       collection << klass.new(current_line)
     end
+  end
+
+  def self.setup
+    yield self
   end
 
 private

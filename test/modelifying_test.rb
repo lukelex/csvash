@@ -22,7 +22,7 @@ describe 'Modelifying' do
     end
 
     it "Mass assignment Safe Mode ON" do
-      Csvash.mass_assignment_safe = true
+      Csvash.setup { |config| config.mass_assignment_safe = true }
       cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example_mass_assignment.csv'), Car
     end
   end

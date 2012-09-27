@@ -5,19 +5,21 @@ module Csvash
   class << self; attr_accessor :mass_assignment_safe end
   @@mass_assignment_safe = false
 
-  # <b>DEPRECATED:</b> Please use <tt>hashify</tt> instead.
-  def self.import_from_path(path)
-    warn "[DEPRECATION] `import_from_path` is deprecated. Please use `hashify` instead."
-    hashify path
+  def self.setup
+    yield self
   end
 
+  def self.respond_to?(method)
+    (method =~ /^modelify_and_\w+$/) || super
+  end
+
+private
   def self.hashify(path)
     import path do |collection, current_line|
       collection << current_line
     end
   end
 
-  # <b>DEPRECATED:</b> Please use <tt>modelify_and_export</tt> or <tt>modelify_and_import</tt> instead.
   def self.modelify(path, klass, *args)
     klass = klass.to_s.classify.constantize if klass.is_a?(String) || klass.is_a?(Symbol)
     method = args.first
@@ -27,11 +29,6 @@ module Csvash
     end
   end
 
-  def self.setup
-    yield self
-  end
-
-private
   def self.import(path, *optionals, &block)
     cols = nil
     collection = []
@@ -85,11 +82,6 @@ private
   def self.method_missing(method_name, *args)
     super unless method_name =~ /^modelify_and_(\w+)$/
     Csvash.public_send(:modelify, *args, $1)
-  end
-
-  # overriding respond_to method
-  def respond_to?(method)
-    (method =~ /^modelify_and_\w+$/) || super
   end
 
   # creates the full path

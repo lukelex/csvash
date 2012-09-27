@@ -36,18 +36,22 @@ To get a collection of hashes containing the csv data you can call:
 Csvash.hashify '/path/of/your/file.csv'
 ```
 
-Csvash allows manage CSV files through export or import actions.
+Note: You can use `modelify_and_export` or `modelify_and_import` methods to generate or parse csv files respectively.
 
-To import, if you prefer a collection of already filled objects from a specific class you can pass the csv path and the class:
+In order to export, you can pass the desired path and CSV filename. Finally, you can pass a collection of already filled objects from a specific class you can pass the array:
+
+```ruby
+Csvash.modelify_and_export '/path/to/file.csv', collection
+```
+
+_Where **collection** is an array of User objects, for example_
+
+However, to import from a csv file you can pass the path where the file is allocated and a class, as usual:
 
 ```ruby
 Csvash.modelify_and_import '/path/of/your/file.csv', User
 ```
-However, to export csv files from a collection of objects (an ORM objects, whatever) you can pass the path plus the desired filename to the csv file and the collection itself.
 
-```ruby
-Csvash.modelify_and_export 'path/to/file.csv', collection
-```
 _* The path and its directories are created automatically_
 
 ##Options

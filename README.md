@@ -37,7 +37,6 @@ In order to import from a CSV file you can pass the path where the file is alloc
 Csvash.modelify_and_import '/path/of/your/file.csv', User
 ```
 
-_Where **collection** is an array of User objects, for example_
 
 However, to export you can pass the desired path and CSV filename. Finally, you can pass a collection of already filled objects from a specific class:
 
@@ -45,6 +44,7 @@ However, to export you can pass the desired path and CSV filename. Finally, you 
 Csvash.modelify_and_export '/path/to/file.csv', collection
 ```
 
+_Where **collection** is an array of User objects, for example_
 _* The path and its directories are created automatically_
 
 To get just a collection of hashes containing the csv data you can call:

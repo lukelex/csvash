@@ -17,7 +17,7 @@ And then execute:
 $ bundle
 ```
 
-Or install it yourself as:
+Not using Rails? install it yourself with:
 
 ```
 $ gem install csvash

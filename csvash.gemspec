@@ -5,8 +5,8 @@ Gem::Specification.new do |gem|
   gem.name          = "csvash"
   gem.authors       = ["Lukas Alexandre", "Uriel Juliatti"]
   gem.email         = ["lukeskytm@gmail.com", "uriel.juliattivalle@gmail.com"]
-  gem.description   = %q{Csvash automates your CSV extraction by mapping its headers with the columns contents and turning them into hashes that can be easily converted into ruby models.}
-  gem.summary       = %q{Csvash automates your CSV extraction by mapping its headers with the columns contents and turning them into hashes that can be easily converted into ruby models.}
+  gem.description   = %q{Simplify CSV to Model mapping and vice versa.}
+  gem.summary       = %q{Simplify CSV to Model mapping and vice versa.}
   gem.homepage      = "https://github.com/lukasalexandre/csvash"
   gem.files         = `git ls-files`.split($\)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }

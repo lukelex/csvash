@@ -7,6 +7,12 @@ include TestHelper
 
 describe 'Modelifying' do
   describe "import" do
+    before :each do
+      Csvash.setup do |config|
+        config.mass_assignment_safe = false
+        config.column_separator = ";"
+      end
+    end
     it "passing the class" do
       cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example.csv'), Car
       car = Car.new(
@@ -28,7 +34,7 @@ describe 'Modelifying' do
 
     it "Changing default column separator" do
       Csvash.setup { |config| config.column_separator = "," }
-      cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example_mass_assignment.csv'), Car
+      cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example_comma.csv'), Car
     end
   end
   describe "export" do

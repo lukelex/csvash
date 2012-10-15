@@ -2,6 +2,7 @@
 *.rbc
 .bundle
 .config
+.swp
 .DS_Store
 .yardoc
 Gemfile.lock

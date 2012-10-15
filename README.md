@@ -37,7 +37,6 @@ In order to import from a CSV file you can pass the path where the file is alloc
 Csvash.modelify_and_import '/path/of/your/file.csv', User
 ```
 
-
 However, to export you can pass the desired path and CSV filename. Finally, you can pass a collection of already filled objects from a specific class:
 
 ```ruby
@@ -66,6 +65,9 @@ These are the avaiable options
 ```ruby
 # If set to true it will only retain fields that matches the class to be filled. Default is false.
 # config.mass_assignment_safe = true
+
+# Defines the default column separator to be used. Default is ';'
+# column_separator = ';'
 ```
 
 ## Contributing

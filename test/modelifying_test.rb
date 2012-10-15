@@ -25,6 +25,11 @@ describe 'Modelifying' do
       Csvash.setup { |config| config.mass_assignment_safe = true }
       cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example_mass_assignment.csv'), Car
     end
+
+    it "Changing default column separator" do
+      Csvash.setup { |config| config.column_separator = "," }
+      cars_extracted = Csvash.modelify_and_import fetch_fixture_path('example_mass_assignment.csv'), Car
+    end
   end
   describe "export" do
     before :each do

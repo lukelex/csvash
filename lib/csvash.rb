@@ -2,8 +2,11 @@ require 'csvash/version'
 require 'csv'
 
 module Csvash
-  class << self; attr_accessor :mass_assignment_safe end
-  @@mass_assignment_safe = false
+  class << self
+    attr_accessor :mass_assignment_safe, :column_separator
+  end
+  self.mass_assignment_safe = false
+  self.column_separator = ";"
 
   def self.setup
     yield self
@@ -34,7 +37,7 @@ private
     collection = []
     first_line = true
 
-    CSV.foreach(path, :encoding => "ISO-8859-1:UTF-8", :col_sep => "\;") do |line|
+    CSV.foreach(path, :encoding => "ISO-8859-1:UTF-8", :col_sep => self.column_separator) do |line|
       if first_line
         # getting colum names and turning them into symbols
         cols = line.map! { |c| c.downcase.to_sym }
@@ -58,7 +61,7 @@ private
     unless collection.empty?
       headers = retrieve_headers collection
       begin
-        CSV.open(file, 'wb', :col_sep => "\;") do |csv|
+        CSV.open(file, 'wb', :col_sep => self.column_separator) do |csv|
           csv << headers
           collection.each do |item|
             csv << retrieve_fields(item, headers)

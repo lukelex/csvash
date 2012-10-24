@@ -1,5 +1,7 @@
 # Csvash
 
+[![Build Status](https://secure.travis-ci.org/lukasalexandre/csvash.png)](http://travis-ci.org/lukasalexandre/csvash) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/lukasalexandre/csvash)
+
 Got tired of parsing CSV files to your Models, or exporting into it?
 Csvash automates that process for you. It handles your CSV extraction by mapping the document headers with your model properties and automagically creating new filled instances.
 
